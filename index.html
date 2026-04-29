@@ -252,12 +252,14 @@
     .status-item.active-item span:last-child { color: var(--accent); }
     .status-item.pending-item span:last-child { color: var(--muted); }
 
-    /* Notify form */
-    .notify {
+    /* Contact Us */
+    .contact {
       animation: fadeUp 0.6s 0.5s ease both;
+      max-width: 480px;
+      margin: 0 auto;
     }
 
-    .notify p {
+    .contact p.contact-label {
       font-size: 0.75rem;
       color: var(--muted);
       letter-spacing: 0.1em;
@@ -265,46 +267,51 @@
       margin-bottom: 0.8rem;
     }
 
-    .input-row {
+    .contact-card {
       display: flex;
-      gap: 0.5rem;
-      max-width: 380px;
-      margin: 0 auto;
-    }
-
-    .input-row input {
-      flex: 1;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
       background: var(--panel);
       border: 1px solid var(--border);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.85rem;
-      padding: 0.65rem 1rem;
-      border-radius: 3px;
-      outline: none;
-      transition: border-color 0.2s;
+      border-radius: 4px;
+      padding: 0.85rem 1.5rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    .input-row input:focus { border-color: var(--accent); }
-    .input-row input::placeholder { color: var(--muted); }
+    .contact-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 16px rgba(240, 180, 41, 0.12);
+    }
 
-    .input-row button {
-      background: var(--accent);
-      color: #000;
-      border: none;
-      font-family: 'DM Sans', sans-serif;
+    .contact-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: rgba(240, 180, 41, 0.1);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .contact-icon svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .contact-card a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
       font-weight: 500;
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      padding: 0.65rem 1.2rem;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.1s;
-      white-space: nowrap;
+      letter-spacing: 0.03em;
+      transition: opacity 0.2s;
     }
 
-    .input-row button:hover { opacity: 0.85; transform: translateY(-1px); }
-    .input-row button:active { transform: translateY(0); }
+    .contact-card a:hover {
+      opacity: 0.75;
+    }
 
     /* Footer */
     .footer {
@@ -333,13 +340,6 @@
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
-    }
-
-    .success-msg {
-      font-size: 0.8rem;
-      color: #4ade80;
-      margin-top: 0.6rem;
-      display: none;
     }
   </style>
 </head>
@@ -405,42 +405,28 @@
       </div>
       <div class="status-item pending-item">
         <div class="dot pending"></div>
-        <span>Final QA & Testing</span>
+        <span>Final QA &amp; Testing</span>
         <span>Pending</span>
       </div>
     </div>
 
-    <!-- Notify -->
-    <div class="notify">
-      <p>Notify me when it's back</p>
-      <div class="input-row">
-        <input type="email" placeholder="your@email.com" id="emailInput"/>
-        <button onclick="handleNotify()">Notify Me</button>
+    <!-- Contact Us -->
+    <div class="contact">
+      <p class="contact-label">Need help? Contact us</p>
+      <div class="contact-card">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="#f0b429" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="22,6 12,13 2,6" stroke="#f0b429" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <a href="mailto:info@silenteye.info">info@silenteye.info</a>
       </div>
-      <p class="success-msg" id="successMsg">✓ You'll be notified when we're back!</p>
     </div>
 
   </div>
 
   <div class="footer">EST. RETURN — WITHIN 24 HOURS &nbsp;·&nbsp; THANK YOU FOR YOUR PATIENCE</div>
 
-  <script>
-    function handleNotify() {
-      const input = document.getElementById('emailInput');
-      const msg = document.getElementById('successMsg');
-      if (input.value && input.value.includes('@')) {
-        msg.style.display = 'block';
-        input.value = '';
-        input.style.borderColor = '#4ade80';
-      } else {
-        input.style.borderColor = '#ff6b35';
-        setTimeout(() => input.style.borderColor = '', 1000);
-      }
-    }
-
-    document.getElementById('emailInput').addEventListener('keydown', e => {
-      if (e.key === 'Enter') handleNotify();
-    });
-  </script>
 </body>
 </html>
