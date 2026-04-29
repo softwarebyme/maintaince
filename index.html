@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Under Maintenance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --panel: #111118;
+      --border: #1e1e2e;
+      --accent: #f0b429;
+      --accent2: #ff6b35;
+      --text: #e8e8f0;
+      --muted: #5a5a72;
+      --glow: rgba(240, 180, 41, 0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Animated grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridDrift 20s linear infinite;
+      opacity: 0.4;
+    }
+
+    @keyframes gridDrift {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(60px, 60px); }
+    }
+
+    /* Radial glow blob */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 700px;
+      height: 700px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+      pointer-events: none;
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+      max-width: 700px;
+      width: 100%;
+    }
+
+    /* Gear icon */
+    .gear-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 2.5rem;
+    }
+
+    .gear-wrap svg {
+      animation: spin 8s linear infinite;
+      filter: drop-shadow(0 0 20px var(--accent));
+    }
+
+    .gear-inner svg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: spinReverse 5s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes spinReverse {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(-360deg); }
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--accent);
+      color: #000;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 10vw, 7rem);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      margin-bottom: 1rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    h1 span {
+      display: block;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 420px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.5rem 2rem;
+      margin: 0 auto 2rem;
+      max-width: 480px;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .progress-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .progress-pct {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+
+    .bar-bg {
+      background: var(--border);
+      border-radius: 2px;
+      height: 4px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      width: 0%;
+      animation: fillBar 3s 0.8s ease forwards;
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    @keyframes fillBar {
+      to { width: 73%; }
+    }
+
+    /* Status dots */
+    .status-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      text-align: left;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 0.6rem 1rem;
+      border-radius: 4px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot.done { background: #4ade80; box-shadow: 0 0 6px #4ade80; }
+    .dot.active { background: var(--accent); box-shadow: 0 0 6px var(--accent); animation: blink 1.2s ease-in-out infinite; }
+    .dot.pending { background: var(--border); }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .status-item span:last-child {
+      margin-left: auto;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .status-item.done-item span:last-child { color: #4ade80; }
+    .status-item.active-item span:last-child { color: var(--accent); }
+    .status-item.pending-item span:last-child { color: var(--muted); }
+
+    /* Notify form */
+    .notify {
+      animation: fadeUp 0.6s 0.5s ease both;
+    }
+
+    .notify p {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 0.5rem;
+      max-width: 380px;
+      margin: 0 auto;
+    }
+
+    .input-row input {
+      flex: 1;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      padding: 0.65rem 1rem;
+      border-radius: 3px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-row input:focus { border-color: var(--accent); }
+    .input-row input::placeholder { color: var(--muted); }
+
+    .input-row button {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      padding: 0.65rem 1.2rem;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+
+    .input-row button:hover { opacity: 0.85; transform: translateY(-1px); }
+    .input-row button:active { transform: translateY(0); }
+
+    /* Footer */
+    .footer {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      z-index: 10;
+    }
+
+    /* Corner decorations */
+    .corner {
+      position: fixed;
+      width: 80px;
+      height: 80px;
+      z-index: 5;
+      opacity: 0.3;
+    }
+
+    .corner-tl { top: 1.5rem; left: 1.5rem; border-top: 1px solid var(--accent); border-left: 1px solid var(--accent); }
+    .corner-br { bottom: 1.5rem; right: 1.5rem; border-bottom: 1px solid var(--accent); border-right: 1px solid var(--accent); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .success-msg {
+      font-size: 0.8rem;
+      color: #4ade80;
+      margin-top: 0.6rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-br"></div>
+
+  <div class="container">
+
+    <!-- Gear icon -->
+    <div class="gear-wrap">
+      <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M36 24a12 12 0 1 0 0 24 12 12 0 0 0 0-24z" stroke="#f0b429" stroke-width="2"/>
+        <path d="M36 4v6M36 62v6M4 36h6M62 36h6M11.5 11.5l4.2 4.2M56.3 56.3l4.2 4.2M11.5 60.5l4.2-4.2M56.3 15.7l4.2-4.2" stroke="#f0b429" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="36" cy="36" r="30" stroke="#f0b429" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.4"/>
+        <circle cx="36" cy="36" r="20" stroke="#ff6b35" stroke-width="1" stroke-dasharray="2 4" opacity="0.3"/>
+      </svg>
+      <div class="gear-inner">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="14" cy="14" r="5" fill="#f0b429" opacity="0.8"/>
+          <circle cx="14" cy="14" r="9" stroke="#ff6b35" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.6"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="tag">⚙ System Maintenance</div>
+
+    <h1>We'll Be<br/><span>Back Soon</span></h1>
+
+    <p class="subtitle">
+      Our team is currently performing scheduled maintenance to improve your experience.
+      We apologize for any inconvenience.
+    </p>
+
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span class="progress-label">Overall Progress</span>
+        <span class="progress-pct">73%</span>
+      </div>
+      <div class="bar-bg">
+        <div class="bar-fill"></div>
+      </div>
+    </div>
+
+    <!-- Status list -->
+    <div class="status-list">
+      <div class="status-item done-item">
+        <div class="dot done"></div>
+        <span>Database Migration</span>
+        <span>Complete</span>
+      </div>
+      <div class="status-item done-item">
+        <div class="dot done"></div>
+        <span>Upgrading Services</span>
+        <span>Complete</span>
+      </div>
+      <div class="status-item active-item">
+        <div class="dot active"></div>
+        <span>Server Optimization</span>
+        <span>In Progress</span>
+      </div>
+      <div class="status-item pending-item">
+        <div class="dot pending"></div>
+        <span>Final QA & Testing</span>
+        <span>Pending</span>
+      </div>
+    </div>
+
+    <!-- Notify -->
+    <div class="notify">
+      <p>Notify me when it's back</p>
+      <div class="input-row">
+        <input type="email" placeholder="your@email.com" id="emailInput"/>
+        <button onclick="handleNotify()">Notify Me</button>
+      </div>
+      <p class="success-msg" id="successMsg">✓ You'll be notified when we're back!</p>
+    </div>
+
+  </div>
+
+  <div class="footer">EST. RETURN — WITHIN 24 HOURS &nbsp;·&nbsp; THANK YOU FOR YOUR PATIENCE</div>
+
+  <script>
+    function handleNotify() {
+      const input = document.getElementById('emailInput');
+      const msg = document.getElementById('successMsg');
+      if (input.value && input.value.includes('@')) {
+        msg.style.display = 'block';
+        input.value = '';
+        input.style.borderColor = '#4ade80';
+      } else {
+        input.style.borderColor = '#ff6b35';
+        setTimeout(() => input.style.borderColor = '', 1000);
+      }
+    }
+
+    document.getElementById('emailInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleNotify();
+    });
+  </script>
+</body>
+</html>
